@@ -1,4 +1,5 @@
 import {FormEvent, useState} from 'react';
+import logo from './assets/logo1.png';
 
 const CONTACT_EMAIL = 'comercial@evolveds.pt';
 
@@ -228,7 +229,7 @@ function App() {
     return (
         <>
             <header>
-                <a className="logo" href="#">EVOLVE</a>
+                <img src={logo} alt="Evolve Solutions" className="logo-image" />
                 <nav>
                     <a href="#solucao">Solução</a>
                     <a href="#pacotes">Pacotes</a>
