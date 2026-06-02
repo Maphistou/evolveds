@@ -26,7 +26,7 @@ export default async function handler(req: any, res: any) {
         });
         const result = await resend.emails.send({
             from: 'onboarding@resend.dev',
-            to: 'TEU_EMAIL@gmail.com',
+            to: 'comercial@evolveds.pt',
             subject: 'Novo pedido de proposta',
             html: '<p>Teste de envio</p>',
         });
