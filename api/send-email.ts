@@ -24,6 +24,13 @@ export default async function handler(req: any, res: any) {
         <p>${message}</p>
       `,
         });
+        const result = await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: 'TEU_EMAIL@gmail.com',
+            subject: 'Novo pedido de proposta',
+            html: '<p>Teste de envio</p>',
+        });
+        console.log('RESEND RESULT:', result);
 
         return res.status(200).json({ success: true });
     } catch {
