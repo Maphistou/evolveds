@@ -1,7 +1,5 @@
-import {FormEvent, useState} from 'react';
+import { FormEvent, useState } from 'react';
 import logo from './assets/logo1.png';
-
-const CONTACT_EMAIL = 'comercial@evolveds.pt';
 
 type Plan = {
     number: string;
@@ -183,47 +181,42 @@ const carePlans: CarePlan[] = [
 ];
 
 const steps: Step[] = [
-    {number: '01', title: 'Briefing', text: 'Recolhemos informação, serviços, contactos, estilo visual e objetivos.'},
-    {number: '02', title: 'Design', text: 'Criamos a estrutura visual e o conteúdo base do website.'},
-    {
-        number: '03',
-        title: 'Construção',
-        text: 'Desenvolvemos o website responsivo com formulários e contactos rápidos.'
-    },
-    {number: '04', title: 'Lançamento', text: 'Configuramos domínio, alojamento e colocamos o website online.'},
+    { number: '01', title: 'Briefing', text: 'Recolhemos informação, serviços, contactos, estilo visual e objetivos.' },
+    { number: '02', title: 'Design', text: 'Criamos a estrutura visual e o conteúdo base do website.' },
+    { number: '03', title: 'Construção', text: 'Desenvolvemos o website responsivo com formulários e contactos rápidos.' },
+    { number: '04', title: 'Lançamento', text: 'Configuramos domínio, alojamento e colocamos o website online.' },
 ];
 
 function App() {
-    const [form, setForm] = useState({
-        name: '',
-        phone: '',
-        business: '',
-        pack: 'Tenho interesse no Bronze',
-        message: '',
-    });
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [business, setBusiness] = useState('');
+    const [pack, setPack] = useState('Tenho interesse no Bronze');
+    const [message, setMessage] = useState('');
+    const [isSending, setIsSending] = useState(false);
 
-    const updateField = (field: keyof typeof form, value: string) => {
-        setForm((current) => ({...current, [field]: value}));
-    };
-
-    const sendLead = (event: FormEvent<HTMLFormElement>) => {
+    const sendLead = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setIsSending(true);
 
-        const name = form.name || 'Cliente';
-        const subject = `Pedido de proposta — ${form.business || name}`;
-        const body = [
-            `Olá Evolve, sou ${name}.`,
-            '',
-            `Empresa: ${form.business}`,
-            `Telefone: ${form.phone}`,
-            `Interesse: ${form.pack}`,
-            '',
-            `Mensagem: ${form.message}`,
-        ].join('\n');
+        const response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, phone, business, pack, message }),
+        });
 
-        const url = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        setIsSending(false);
 
-        window.location.href = url;
+        if (response.ok) {
+            alert('Pedido enviado com sucesso!');
+            setName('');
+            setPhone('');
+            setBusiness('');
+            setPack('Tenho interesse no Bronze');
+            setMessage('');
+        } else {
+            alert('Erro ao enviar pedido. Tente novamente.');
+        }
     };
 
     return (
@@ -245,8 +238,10 @@ function App() {
                     <div className="hero-inner">
                         <p className="kicker">Websites premium para negócios locais</p>
                         <h1>A sua empresa. Mais profissional online.</h1>
-                        <p className="lead">Criamos websites modernos, responsivos e orientados para contactos,
-                            marcações e pedidos de orçamento.</p>
+                        <p className="lead">
+                            Criamos websites modernos, responsivos e orientados para contactos,
+                            marcações e pedidos de orçamento.
+                        </p>
                         <div className="actions">
                             <a className="btn btn-dark" href="#pacotes">Ver pacotes</a>
                             <a className="btn btn-light" href="#contacto">Pedir proposta</a>
@@ -255,17 +250,23 @@ function App() {
                 </section>
 
                 <section className="statement">
-                    <h2>Não criamos apenas websites. Criamos presença digital que transmite confiança antes do primeiro
-                        contacto.</h2>
+                    <h2>
+                        Não criamos apenas websites. Criamos presença digital que transmite
+                        confiança antes do primeiro contacto.
+                    </h2>
                 </section>
 
                 <section id="solucao">
                     <div className="section-title">
                         <p className="kicker">A solução</p>
                         <h2>Simples. Premium. Funcional.</h2>
-                        <p>A Evolve desenvolve websites para negócios que precisam de parecer mais profissionais,
-                            explicar melhor os seus serviços e facilitar o contacto com clientes.</p>
+                        <p>
+                            A Evolve desenvolve websites para negócios que precisam de parecer
+                            mais profissionais, explicar melhor os seus serviços e facilitar o
+                            contacto com clientes.
+                        </p>
                     </div>
+
                     <div className="grid-3">
                         {values.map((value) => (
                             <div className="value-card" key={value.number}>
@@ -283,6 +284,7 @@ function App() {
                         <h2>Escolha o nível certo para o seu negócio.</h2>
                         <p>Todos os valores acrescem IVA à taxa legal. Promoção de lançamento com desconto limitado.</p>
                     </div>
+
                     <div className="pricing-grid">
                         {plans.map((plan) => (
                             <article className={`plan${plan.featured ? ' featured' : ''}`} key={plan.title}>
@@ -302,9 +304,12 @@ function App() {
                     <div className="section-title">
                         <p className="kicker">Evolve Care</p>
                         <h2>Gestão e manutenção obrigatória durante 12 meses.</h2>
-                        <p>Todos os websites incluem plano Care para garantir funcionamento, suporte, alojamento,
-                            backups e atualizações.</p>
+                        <p>
+                            Todos os websites incluem plano Care para garantir funcionamento,
+                            suporte, alojamento, backups e atualizações.
+                        </p>
                     </div>
+
                     <div className="care-grid">
                         {carePlans.map((carePlan) => (
                             <article className="care-card" key={carePlan.title}>
@@ -323,6 +328,7 @@ function App() {
                         <h2>Da ideia ao website online.</h2>
                         <p>Um processo simples, rápido e pensado para negócios que não querem perder tempo.</p>
                     </div>
+
                     <div className="process-grid">
                         {steps.map((step) => (
                             <div className="process-step" key={step.number}>
@@ -341,25 +347,29 @@ function App() {
                             <h3>Quer melhorar a presença digital da sua empresa?</h3>
                             <p className="lead lead-box-text">Envie os dados e indicamos o pacote mais adequado.</p>
                         </div>
+
                         <form onSubmit={sendLead}>
-                            <input value={form.name} onChange={(event) => updateField('name', event.target.value)}
-                                   placeholder="Nome"/>
-                            <input value={form.phone} onChange={(event) => updateField('phone', event.target.value)}
-                                   placeholder="Telefone"/>
-                            <input value={form.business}
-                                   onChange={(event) => updateField('business', event.target.value)}
-                                   placeholder="Nome da empresa"/>
-                            <select value={form.pack} onChange={(event) => updateField('pack', event.target.value)}>
+                            <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nome" />
+                            <input value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="Telefone" />
+                            <input value={business} onChange={(event) => setBusiness(event.target.value)} placeholder="Nome da empresa" />
+
+                            <select value={pack} onChange={(event) => setPack(event.target.value)}>
                                 <option>Tenho interesse no Bronze</option>
                                 <option>Tenho interesse no Silver</option>
                                 <option>Tenho interesse no Gold</option>
                                 <option>Tenho interesse no Bespoke</option>
                                 <option>Ainda não sei</option>
                             </select>
-                            <textarea value={form.message}
-                                      onChange={(event) => updateField('message', event.target.value)}
-                                      placeholder="Explique brevemente o que pretende"/>
-                            <button type="submit">Pedir proposta por email</button>
+
+                            <textarea
+                                value={message}
+                                onChange={(event) => setMessage(event.target.value)}
+                                placeholder="Explique brevemente o que pretende"
+                            />
+
+                            <button type="submit" disabled={isSending}>
+                                {isSending ? 'A enviar...' : 'Pedir proposta por email'}
+                            </button>
                         </form>
                     </div>
                 </section>
