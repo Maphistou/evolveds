@@ -71,7 +71,7 @@ const plans: Plan[] = [
         title: 'Evolve Silver',
         subtitle: 'Para empresas que querem gerar mais contactos.',
         price: '399,99€',
-        note: 'promoção lançamento · antes 699,99€',
+        note: 'promoção lançamento · antes 799,99€',
         items: [
             'Inclui Evolve Bronze',
             'Sistema de marcações',
