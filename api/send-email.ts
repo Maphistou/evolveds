@@ -11,7 +11,7 @@ export default async function handler(req: any, res: any) {
 
     try {
         await resend.emails.send({
-            from: 'Evolveds <noreply@evolveds.pt>',
+            from: 'onboarding@resend.dev',
             to: 'comercial@evolveds.pt',
             subject: `Novo pedido de proposta - ${business || name}`,
             html: `
