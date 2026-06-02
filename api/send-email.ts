@@ -13,8 +13,8 @@ export default async function handler(req: any, res: any) {
         const { name, phone, business, pack, message } = req.body;
 
         const result = await resend.emails.send({
-            from: 'onboarding@resend.dev',
-            to: 'carlosmoralteixeira@gmail.com',
+            from: 'Evolveds <comercial@evolveds.pt>',
+            to: 'comercial@evolveds.pt',
             subject: `Novo pedido de proposta - ${business || name}`,
             html: `
         <h2>Novo pedido de proposta</h2>
