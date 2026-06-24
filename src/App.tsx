@@ -1,5 +1,7 @@
 import { FormEvent, useState } from 'react';
 import logo from './assets/logo1.png';
+import logo2 from './assets/logo2.png';
+import BookingModal from './BookingModal';
 
 type Plan = {
     number: string;
@@ -194,6 +196,7 @@ function App() {
     const [pack, setPack] = useState('Tenho interesse no Bronze');
     const [message, setMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const [showBooking, setShowBooking] = useState(false);
 
     const sendLead = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -221,6 +224,7 @@ function App() {
 
     return (
         <>
+            {showBooking && <BookingModal onClose={() => setShowBooking(false)} />}
             <header>
                 <img src={logo} alt="Evolve Solutions" className="logo-image" />
                 <nav>
@@ -230,21 +234,31 @@ function App() {
                     <a href="#processo">Processo</a>
                     <a href="#contacto">Contacto</a>
                 </nav>
-                <a className="nav-btn" href="#contacto">Pedir proposta</a>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button className="nav-btn" onClick={() => setShowBooking(true)}>Agendar reunião</button>
+                    <a className="nav-btn" href="#contacto">Pedir proposta</a>
+                </div>
             </header>
 
             <main>
                 <section className="hero">
                     <div className="hero-inner">
-                        <p className="kicker">Websites premium para negócios locais</p>
-                        <h1>A sua empresa. Mais profissional online.</h1>
-                        <p className="lead">
-                            Criamos websites modernos, responsivos e orientados para contactos,
-                            marcações e pedidos de orçamento.
-                        </p>
-                        <div className="actions">
-                            <a className="btn btn-dark" href="#pacotes">Ver pacotes</a>
-                            <a className="btn btn-light" href="#contacto">Pedir proposta</a>
+                        <div className="hero-content">
+                            <div className="hero-text">
+                                <p className="kicker">Websites premium para negócios locais</p>
+                                <h1>A sua empresa. Mais profissional online.</h1>
+                                <p className="lead">
+                                    Criamos websites modernos, responsivos e orientados para contactos,
+                                    marcações e pedidos de orçamento.
+                                </p>
+                                <div className="actions">
+                                    <a className="btn btn-dark" href="#pacotes">Ver pacotes</a>
+                                    <a className="btn btn-light" href="#contacto">Pedir proposta</a>
+                                </div>
+                            </div>
+                            <div className="hero-logo">
+                                <img src={logo2} alt="Evolve" className="hero-logo-img" />
+                            </div>
                         </div>
                     </div>
                 </section>
