@@ -34,21 +34,12 @@ export default async function handler(req: any, res: any) {
 
         const event = await calendar.events.insert({
             calendarId: CALENDAR_ID,
-            sendUpdates: 'all',
             requestBody: {
                 summary: `Reunião Evolve — ${name}`,
-                description: `Telefone: ${phone || 'N/A'}\n\nNotas: ${notes || 'N/A'}`,
+                description: `Cliente: ${name}\nEmail: ${email}\nTelefone: ${phone || 'N/A'}\n\nNotas: ${notes || 'N/A'}`,
                 start: { dateTime: start.toISOString(), timeZone: 'Europe/Lisbon' },
                 end: { dateTime: end.toISOString(), timeZone: 'Europe/Lisbon' },
-                attendees: [{ email }],
-                conferenceData: {
-                    createRequest: {
-                        requestId: `evolve-${Date.now()}`,
-                        conferenceSolutionKey: { type: 'hangoutsMeet' },
-                    },
-                },
             },
-            conferenceDataVersion: 1,
         });
 
         const meetLink = event.data.conferenceData?.entryPoints?.[0]?.uri ?? '';
