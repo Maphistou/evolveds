@@ -1,6 +1,5 @@
 import { FormEvent, useState } from 'react';
 import logo from './assets/logo1.png';
-import logo2 from './assets/logo2.png';
 import BookingModal from './BookingModal';
 
 type Plan = {
@@ -243,22 +242,15 @@ function App() {
             <main>
                 <section className="hero">
                     <div className="hero-inner">
-                        <div className="hero-content">
-                            <div className="hero-text">
-                                <p className="kicker">Websites premium para negócios locais</p>
-                                <h1>A sua empresa. Mais profissional online.</h1>
-                                <p className="lead">
-                                    Criamos websites modernos, responsivos e orientados para contactos,
-                                    marcações e pedidos de orçamento.
-                                </p>
-                                <div className="actions">
-                                    <a className="btn btn-dark" href="#pacotes">Ver pacotes</a>
-                                    <a className="btn btn-light" href="#contacto">Pedir proposta</a>
-                                </div>
-                            </div>
-                            <div className="hero-logo">
-                                <img src={logo2} alt="Evolve" className="hero-logo-img" />
-                            </div>
+                        <p className="kicker">Websites premium para negócios locais</p>
+                        <h1>A sua empresa. Mais profissional online.</h1>
+                        <p className="lead">
+                            Criamos websites modernos, responsivos e orientados para contactos,
+                            marcações e pedidos de orçamento.
+                        </p>
+                        <div className="actions">
+                            <a className="btn btn-dark" href="#pacotes">Ver pacotes</a>
+                            <a className="btn btn-light" href="#contacto">Pedir proposta</a>
                         </div>
                     </div>
                 </section>

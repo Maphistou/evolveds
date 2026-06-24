@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 
 type Step = 'calendar' | 'slots' | 'form' | 'success';
 
-const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 function getDaysInMonth(year: number, month: number) {
@@ -10,7 +10,8 @@ function getDaysInMonth(year: number, month: number) {
 }
 
 function getFirstDayOfMonth(year: number, month: number) {
-    return new Date(year, month, 1).getDay();
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1; // Monday = 0
 }
 
 function isSameDay(a: Date, b: Date) {
@@ -128,13 +129,15 @@ export default function BookingModal({ onClose }: { onClose: () => void }) {
                             {Array.from({ length: daysInMonth }).map((_, i) => {
                                 const date = new Date(viewYear, viewMonth, i + 1);
                                 const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-                                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                                const isWeekend = date.getDay() === 6 || date.getDay() === 0;
                                 const isSelected = selectedDate && isSameDay(date, selectedDate);
+                                if (isPast || isWeekend) {
+                                    return <span key={i} className="cal-day disabled">{i + 1}</span>;
+                                }
                                 return (
                                     <button
                                         key={i}
-                                        className={`cal-day${isSelected ? ' selected' : ''}${isPast || isWeekend ? ' disabled' : ''}`}
-                                        disabled={isPast || isWeekend}
+                                        className={`cal-day${isSelected ? ' selected' : ''}`}
                                         onClick={() => selectDate(date)}
                                     >
                                         {i + 1}
