@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" fill="none">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7a8ca8"/>
+      <stop offset="100%" stop-color="#c8cdd5"/>
+    </linearGradient>
+  </defs>
+  <text
+    x="50%"
+    y="72"
+    text-anchor="middle"
+    font-family="'Nunito', 'Varela Round', Arial Rounded MT Bold, sans-serif"
+    font-size="72"
+    font-weight="700"
+    fill="url(#lg)"
+    letter-spacing="-1"
+  >evolve</text>
+</svg>

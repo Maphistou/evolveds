@@ -1,5 +1,6 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import logo from './assets/logo1.png';
+import logoSvg from './assets/logo1.svg';
 import BookingModal from './BookingModal';
 
 type Plan = {
@@ -50,7 +51,7 @@ const plans: Plan[] = [
     {
         number: '01',
         tag: 'Bronze',
-        title: 'Evolve Bronze',
+        title: 'Evolve',
         subtitle: 'Presença online profissional, simples e moderna.',
         price: '199,99€',
         note: 'promoção lançamento · antes 399,99€',
@@ -68,7 +69,7 @@ const plans: Plan[] = [
     {
         number: '02',
         tag: 'Silver',
-        title: 'Evolve Silver',
+        title: 'Evolve',
         subtitle: 'Para empresas que querem gerar mais contactos.',
         price: '399,99€',
         note: 'promoção lançamento · antes 799,99€',
@@ -86,7 +87,7 @@ const plans: Plan[] = [
     {
         number: '03',
         tag: 'Gold',
-        title: 'Evolve Gold',
+        title: 'Evolve',
         subtitle: 'Imagem premium, autoridade e maior personalização.',
         price: '749,99€',
         note: 'promoção lançamento · antes 1499,99€',
@@ -105,7 +106,7 @@ const plans: Plan[] = [
     {
         number: '04',
         tag: 'Bespoke',
-        title: 'Evolve Bespoke',
+        title: 'Evolve',
         subtitle: 'Solução personalizada para necessidades específicas.',
         price: 'Sob consulta',
         note: 'desenvolvimento à medida',
@@ -196,6 +197,18 @@ function App() {
     const [message, setMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [showBooking, setShowBooking] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [footerVisible, setFooterVisible] = useState(false);
+    const footerRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) setFooterVisible(true); },
+            { threshold: 0.3 }
+        );
+        if (footerRef.current) observer.observe(footerRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     const sendLead = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -227,17 +240,31 @@ function App() {
             <header>
                 <img src={logo} alt="Evolve Solutions" className="logo-image" />
                 <nav>
-                    <a href="#solucao">Solução</a>
-                    <a href="#pacotes">Pacotes</a>
-                    <a href="#care">Care</a>
-                    <a href="#processo">Processo</a>
-                    <a href="#contacto">Contacto</a>
+                    <a href="#solucao" onClick={() => setMenuOpen(false)}>Solução</a>
+                    <a href="#pacotes" onClick={() => setMenuOpen(false)}>Pacotes</a>
+                    <a href="#care" onClick={() => setMenuOpen(false)}>Care</a>
+                    <a href="#processo" onClick={() => setMenuOpen(false)}>Processo</a>
+                    <a href="#contacto" onClick={() => setMenuOpen(false)}>Contacto</a>
                 </nav>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button className="nav-btn" onClick={() => setShowBooking(true)}>Agendar reunião</button>
                     <a className="nav-btn" href="#contacto">Pedir proposta</a>
                 </div>
+                <button className="hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
+                    <span /><span /><span />
+                </button>
             </header>
+            {menuOpen && (
+                <div className="mobile-menu">
+                    <a href="#solucao" onClick={() => setMenuOpen(false)}>Solução</a>
+                    <a href="#pacotes" onClick={() => setMenuOpen(false)}>Pacotes</a>
+                    <a href="#care" onClick={() => setMenuOpen(false)}>Care</a>
+                    <a href="#processo" onClick={() => setMenuOpen(false)}>Processo</a>
+                    <a href="#contacto" onClick={() => setMenuOpen(false)}>Contacto</a>
+                    <button className="nav-btn" onClick={() => { setShowBooking(true); setMenuOpen(false); }}>Agendar reunião</button>
+                    <a className="nav-btn" href="#contacto" onClick={() => setMenuOpen(false)}>Pedir proposta</a>
+                </div>
+            )}
 
             <main>
                 <section className="hero">
@@ -249,13 +276,17 @@ function App() {
                             marcações e pedidos de orçamento.
                         </p>
                         <div className="actions">
-                            <a className="btn btn-dark" href="#pacotes">Ver pacotes</a>
+                            <button className="btn btn-light hero-cta-book" onClick={() => setShowBooking(true)}>Agendar reunião</button>
                             <a className="btn btn-light" href="#contacto">Pedir proposta</a>
+                            <a className="btn btn-dark hero-cta-pacotes" href="#pacotes">Ver pacotes</a>
                         </div>
                     </div>
                 </section>
 
                 <section className="statement">
+                    <div className="light-beam beam-1" />
+                    <div className="light-beam beam-2" />
+                    <div className="light-beam beam-3" />
                     <h2>
                         Não criamos apenas websites. Criamos presença digital que transmite
                         confiança antes do primeiro contacto.
@@ -293,10 +324,9 @@ function App() {
 
                     <div className="pricing-grid">
                         {plans.map((plan) => (
-                            <article className={`plan${plan.featured ? ' featured' : ''}`} key={plan.title}>
+                            <article className={`plan plan-${plan.tag.toLowerCase()}${plan.featured ? ' featured' : ''}`} key={plan.title}>
+                                <img src={logo} alt="Evolve" className="plan-logo" />
                                 <span className="tag">{plan.tag}</span>
-                                <span className="num">{plan.number}</span>
-                                <h3>{plan.title}</h3>
                                 <p className="subtitle">{plan.subtitle}</p>
                                 <div className="price">{plan.price}<small>{plan.note}</small></div>
                                 <ul>{plan.items.map((item) => <li key={item}>{item}</li>)}</ul>
@@ -307,6 +337,9 @@ function App() {
                 </section>
 
                 <section className="care" id="care">
+                    <div className="light-beam beam-1" />
+                    <div className="light-beam beam-2" />
+                    <div className="light-beam beam-3" />
                     <div className="section-title">
                         <p className="kicker">Evolve Care</p>
                         <h2>Gestão e manutenção obrigatória durante 12 meses.</h2>
@@ -319,7 +352,6 @@ function App() {
                     <div className="care-grid">
                         {carePlans.map((carePlan) => (
                             <article className="care-card" key={carePlan.title}>
-                                <span className="num">{carePlan.number}</span>
                                 <h3>{carePlan.title}</h3>
                                 <div className="care-price">{carePlan.price}<small>{carePlan.note}</small></div>
                                 <ul>{carePlan.items.map((item) => <li key={item}>{item}</li>)}</ul>
@@ -381,6 +413,9 @@ function App() {
                 </section>
 
                 <section className="final">
+                    <div className="light-beam beam-1" />
+                    <div className="light-beam beam-2" />
+                    <div className="light-beam beam-3" />
                     <p className="kicker">Evolve Digital</p>
                     <h2>Websites premium para negócios que querem parecer melhores online.</h2>
                     <div className="actions">
@@ -389,8 +424,8 @@ function App() {
                 </section>
             </main>
 
-            <footer>
-                <strong>EVOLVE</strong>
+            <footer ref={footerRef} className={footerVisible ? 'footer-visible' : ''}>
+                <img src={logo} alt="Evolve" className="footer-logo" />
                 <span>Digital Growth & Premium Websites</span>
             </footer>
         </>
