@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import logo from './assets/logo1.png';
 import logoSvg from './assets/logo1.svg';
+import logoVet from './assets/LogoVetdaQuinta.png';
+import logoFuneraria from './assets/LogoFunerariaRoma.png';
 import BookingModal from './BookingModal';
 
 type Plan = {
@@ -199,7 +201,9 @@ function App() {
     const [showBooking, setShowBooking] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [footerVisible, setFooterVisible] = useState(false);
+    const [processAnimated, setProcessAnimated] = useState(false);
     const footerRef = useRef<HTMLElement>(null);
+    const processRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -207,6 +211,15 @@ function App() {
             { threshold: 0.3 }
         );
         if (footerRef.current) observer.observe(footerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => { setProcessAnimated(entry.isIntersecting); },
+            { threshold: 0.2 }
+        );
+        if (processRef.current) observer.observe(processRef.current);
         return () => observer.disconnect();
     }, []);
 
@@ -367,7 +380,7 @@ function App() {
                         <p>Um processo simples, rápido e pensado para negócios que não querem perder tempo.</p>
                     </div>
 
-                    <div className="process-grid">
+                    <div ref={processRef} className={`process-grid${processAnimated ? ' process-animated' : ''}`}>
                         {steps.map((step) => (
                             <div className="process-step" key={step.number}>
                                 <span className="num">{step.number}</span>
@@ -375,6 +388,19 @@ function App() {
                                 <p>{step.text}</p>
                             </div>
                         ))}
+                    </div>
+                </section>
+
+                <section className="partners">
+                    <div className="partners-pill">
+                        <div className="light-beam beam-1" />
+                        <div className="light-beam beam-2" />
+                        <div className="light-beam beam-3" />
+                        <p className="kicker" style={{textAlign:'center',marginBottom:'32px',color:'#c8cdd5',position:'relative',zIndex:1}}>Empresas que confiam em nós</p>
+                        <div className="partners-static" style={{position:'relative',zIndex:1}}>
+                            <a href="https://vetdaquinta.pt" target="_blank" rel="noreferrer"><img src={logoVet} alt="Vet da Quinta" className="partner-logo" /></a>
+                            <a href="https://agenciafunerariaroma.pt/" target="_blank" rel="noreferrer"><img src={logoFuneraria} alt="Funerária Roma" className="partner-logo" /></a>
+                        </div>
                     </div>
                 </section>
 
