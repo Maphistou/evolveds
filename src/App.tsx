@@ -399,7 +399,7 @@ function App() {
                         <p className="kicker" style={{textAlign:'center',marginBottom:'32px',color:'#c8cdd5',position:'relative',zIndex:1}}>Empresas que confiam em nós</p>
                         <div className="partners-static" style={{position:'relative',zIndex:1}}>
                             <a href="https://vetdaquinta.pt" target="_blank" rel="noreferrer"><img src={logoVet} alt="Vet da Quinta" className="partner-logo" /></a>
-                            <a href="https://agenciafunerariaroma.pt/" target="_blank" rel="noreferrer"><img src={logoFuneraria} alt="Funerária Roma" className="partner-logo" /></a>
+                            <a href="https://www.agenciafunerariaroma.pt" target="_blank" rel="noreferrer"><img src={logoFuneraria} alt="Funerária Roma" className="partner-logo" /></a>
                         </div>
                     </div>
                 </section>
