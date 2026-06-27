@@ -1,6 +1,8 @@
-import { FormEvent, Fragment, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import logo from './assets/logo1.png';
 import logoSvg from './assets/logo1.svg';
+import logoVet from './assets/LogoVetdaQuinta.png';
+import logoFuneraria from './assets/LogoFunerariaRoma.png';
 import BookingModal from './BookingModal';
 
 type Plan = {
@@ -199,9 +201,9 @@ function App() {
     const [showBooking, setShowBooking] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [footerVisible, setFooterVisible] = useState(false);
-    const [arrowPaths, setArrowPaths] = useState<string[]>([]);
+    const [processAnimated, setProcessAnimated] = useState(false);
     const footerRef = useRef<HTMLElement>(null);
-    const zigzagRef = useRef<HTMLDivElement>(null);
+    const processRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -213,28 +215,12 @@ function App() {
     }, []);
 
     useEffect(() => {
-        function calcPaths() {
-            if (!zigzagRef.current) return;
-            const container = zigzagRef.current.getBoundingClientRect();
-            const cards = Array.from(zigzagRef.current.querySelectorAll('.process-step'));
-            if (cards.length < 4) return;
-            const rects = cards.map(c => c.getBoundingClientRect());
-            const sx = 1000 / container.width;
-            const sy = 536 / container.height;
-            const paths = [];
-            for (let i = 0; i < 3; i++) {
-                const x1 = (rects[i].right - container.left) * sx;
-                const y1 = (rects[i].top + rects[i].height / 2 - container.top) * sy;
-                const x2 = (rects[i + 1].left - container.left) * sx;
-                const y2 = (rects[i + 1].top + rects[i + 1].height / 2 - container.top) * sy;
-                const cx = (x1 + x2) / 2;
-                paths.push(`M ${x1},${y1} C ${cx + 40},${y1} ${cx - 40},${y2} ${x2},${y2}`);
-            }
-            setArrowPaths(paths);
-        }
-        calcPaths();
-        window.addEventListener('resize', calcPaths);
-        return () => window.removeEventListener('resize', calcPaths);
+        const observer = new IntersectionObserver(
+            ([entry]) => { setProcessAnimated(entry.isIntersecting); },
+            { threshold: 0.2 }
+        );
+        if (processRef.current) observer.observe(processRef.current);
+        return () => observer.disconnect();
     }, []);
 
     const sendLead = async (event: FormEvent<HTMLFormElement>) => {
@@ -394,29 +380,27 @@ function App() {
                         <p>Um processo simples, rápido e pensado para negócios que não querem perder tempo.</p>
                     </div>
 
-                    <div className="process-zigzag" ref={zigzagRef}>
-                        {steps.map((step, i) => (
-                            <div className="process-step" key={step.number}
-                                style={{ gridColumn: i + 1, gridRow: i % 2 === 0 ? 1 : 2 }}>
+                    <div ref={processRef} className={`process-grid${processAnimated ? ' process-animated' : ''}`}>
+                        {steps.map((step) => (
+                            <div className="process-step" key={step.number}>
+                                <span className="num">{step.number}</span>
                                 <h3>{step.title}</h3>
                                 <p>{step.text}</p>
                             </div>
                         ))}
-                        {arrowPaths.length === 3 && (
-                            <svg className="process-svg" viewBox="0 0 1000 536" preserveAspectRatio="none">
-                                <defs>
-                                    {[1, 2, 3].map(n => (
-                                        <marker key={n} id={`arr${n}`} markerWidth="5" markerHeight="4" refX="4.5" refY="2" orient="auto">
-                                            <polygon points="0 0,5 2,0 4" fill="#555" />
-                                        </marker>
-                                    ))}
-                                </defs>
-                                {arrowPaths.map((d, i) => (
-                                    <path key={i} className={`proc-arrow proc-arrow-${i + 1}`}
-                                        d={d} markerEnd={`url(#arr${i + 1})`} />
-                                ))}
-                            </svg>
-                        )}
+                    </div>
+                </section>
+
+                <section className="partners">
+                    <div className="partners-pill">
+                        <div className="light-beam beam-1" />
+                        <div className="light-beam beam-2" />
+                        <div className="light-beam beam-3" />
+                        <p className="kicker" style={{textAlign:'center',marginBottom:'32px',color:'#c8cdd5',position:'relative',zIndex:1}}>Empresas que confiam em nós</p>
+                        <div className="partners-static" style={{position:'relative',zIndex:1}}>
+                            <a href="https://vetdaquinta.pt" target="_blank" rel="noreferrer"><img src={logoVet} alt="Vet da Quinta" className="partner-logo" /></a>
+                            <a href="https://www.agenciafunerariaroma.pt" target="_blank" rel="noreferrer"><img src={logoFuneraria} alt="Funerária Roma" className="partner-logo" /></a>
+                        </div>
                     </div>
                 </section>
 
