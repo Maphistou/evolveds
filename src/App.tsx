@@ -1,5 +1,13 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import logo from './assets/logo1.png';
+import careCardBg from './assets/CareCard.PNG';
+import firstCardBg from './assets/1stCard.PNG';
+import secondCardBg from './assets/2ndCard.PNG';
+import thirdCardBg from './assets/3rdCard.PNG';
+import careCardVideo from './assets/CareCard.mp4';
+import careCard2Video from './assets/CareCard2.mp4';
+import careCard3Video from './assets/CareCard3.mp4';
+import careCard4Video from './assets/CareCard4.mp4';
 import logoSvg from './assets/logo1.svg';
 import logoVet from './assets/LogoVetdaQuinta.png';
 import logoFuneraria from './assets/LogoFunerariaRoma.png';
@@ -296,10 +304,7 @@ function App() {
                     </div>
                 </section>
 
-                <section className="statement">
-                    <div className="light-beam beam-1" />
-                    <div className="light-beam beam-2" />
-                    <div className="light-beam beam-3" />
+                <section className="statement" style={{ backgroundImage: `url(${firstCardBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <h2>
                         Não criamos apenas websites. Criamos presença digital que transmite
                         confiança antes do primeiro contacto.
@@ -350,9 +355,10 @@ function App() {
                 </section>
 
                 <section className="care" id="care">
-                    <div className="light-beam beam-1" />
-                    <div className="light-beam beam-2" />
-                    <div className="light-beam beam-3" />
+                    <div className="light-beam care-beam-1" />
+                    <div className="light-beam care-beam-2" />
+                    <div className="light-beam care-beam-3" />
+                    <div className="light-beam care-beam-4" />
                     <div className="section-title">
                         <p className="kicker">Evolve Care</p>
                         <h2>Gestão e manutenção obrigatória durante 12 meses.</h2>
@@ -365,6 +371,7 @@ function App() {
                     <div className="care-grid">
                         {carePlans.map((carePlan) => (
                             <article className="care-card" key={carePlan.title}>
+                                <video autoPlay muted loop playsInline className="card-video-bg" src={carePlan.title === 'Silver Care' ? careCard2Video : carePlan.title === 'Gold Care' ? careCard3Video : carePlan.title === 'Bespoke Care' ? careCard4Video : careCardVideo} ref={el => { if (el) el.playbackRate = 0.33; }} />
                                 <h3>{carePlan.title}</h3>
                                 <div className="care-price">{carePlan.price}<small>{carePlan.note}</small></div>
                                 <ul>{carePlan.items.map((item) => <li key={item}>{item}</li>)}</ul>
@@ -393,10 +400,7 @@ function App() {
 
                 <section className="partners">
                     <div className="partners-pill">
-                        <div className="light-beam beam-1" />
-                        <div className="light-beam beam-2" />
-                        <div className="light-beam beam-3" />
-                        <p className="kicker" style={{textAlign:'center',marginBottom:'32px',color:'#c8cdd5',position:'relative',zIndex:1}}>Empresas que confiam em nós</p>
+                        <p className="kicker" style={{textAlign:'center',color:'#c8cdd5',position:'absolute',top:'10px',left:0,right:0,zIndex:1,fontSize:'16px',letterSpacing:'.2em'}}>Empresas que confiam em nós</p>
                         <div className="partners-static" style={{position:'relative',zIndex:1}}>
                             <a href="https://vetdaquinta.pt" target="_blank" rel="noreferrer"><img src={logoVet} alt="Vet da Quinta" className="partner-logo" /></a>
                             <a href="https://www.agenciafunerariaroma.pt" target="_blank" rel="noreferrer"><img src={logoFuneraria} alt="Funerária Roma" className="partner-logo" /></a>
@@ -438,10 +442,7 @@ function App() {
                     </div>
                 </section>
 
-                <section className="final">
-                    <div className="light-beam beam-1" />
-                    <div className="light-beam beam-2" />
-                    <div className="light-beam beam-3" />
+                <section className="final" style={{ backgroundImage: `url(${thirdCardBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <p className="kicker">Evolve Digital</p>
                     <h2>Websites premium para negócios que querem parecer melhores online.</h2>
                     <div className="actions">
